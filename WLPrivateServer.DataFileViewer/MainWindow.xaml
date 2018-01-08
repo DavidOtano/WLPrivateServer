@@ -1,0 +1,60 @@
+﻿<Window x:Class="WLPrivateServer.DataFileViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WLPrivateServer.DataFileViewer"
+		xmlns:items="clr-namespace:WLPrivateServer.Items.Data;assembly=WLPrivateServer.Items"
+		xmlns:converters="clr-namespace:WLPrivateServer.DataFileViewer.Converters"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="393" Width="667">
+	<Window.Resources>
+		<converters:ObjectToTextValueConverter x:Key="objectToTextValueConverter" />
+	</Window.Resources>
+	<Grid>
+		<TabControl>
+			<TabItem Header="Item Data">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="220px" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+
+					<TextBox x:Name="searchText" Grid.Row="0" TextChanged="TextBox_TextChanged" />
+
+					<ListBox x:Name="itemList" Grid.Row="1" Grid.Column="0" ItemsSource="{x:Static items:ItemDataFile.ItemList}" HorizontalContentAlignment="Stretch">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="Auto" />
+									</Grid.ColumnDefinitions>
+
+									<StackPanel Orientation="Horizontal" Grid.Column="0">
+										<TextBlock Text="{Binding ItemID}" Margin="0,0,4,0" />
+										<TextBlock Text="{Binding ItemName}" />
+									</StackPanel>
+
+									<TextBlock Grid.Column="1" Text="{Binding ItemType}" />
+								</Grid>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+
+					<TextBox x:Name="itemInfoText" Grid.Column="1" Grid.RowSpan="2"  Text="{Binding ElementName=itemList, Path=SelectedItem, Converter={StaticResource objectToTextValueConverter}}" />
+
+					<StackPanel Grid.Row="2" Orientation="Horizontal">
+						<TextBlock Text="Items: " />
+						<TextBlock Text="{Binding ElementName=itemList, Path=Items.Count}" />
+					</StackPanel>
+				</Grid>
+			</TabItem>
+		</TabControl>
+	</Grid>
+</Window>
